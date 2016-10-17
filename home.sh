@@ -11,7 +11,7 @@ curl -s -X GET \
 
 length=$(jq -r ".data | length" json.data)
 
-for((i=0;i<$length;i++))
+for((i=0;i<=$length;i++))
 do
 #jq -r ".data[$i]" json.data
 message="$(jq -r ".data[$i].message" json.data)"
