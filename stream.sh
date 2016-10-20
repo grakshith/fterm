@@ -53,7 +53,16 @@ fi
 echo -n "Created time : "
 jq -r ".home.data[$i].created_time" json.data
 echo ""
-echo ""
+echo "$: "
+
+read input
+if [ "$input" = "like" ]
+then
+curl -s -X POST \
+ -d "access_token=$access_token" \
+ "https://graph.facebook.com/v2.1/$id/likes" | jq -r ".success"
+ echo ""
+
 
 done
 
