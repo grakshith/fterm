@@ -5,7 +5,7 @@ source config.cfg
 echo "Your feed"
 
 curl -s -X GET \
- "https://graph.facebook.com/v2.8/me/feed?fields=link,message,place,story,created_time,description&limit=1000&access_token=$access_token" > json.data
+ "https://graph.facebook.com/v2.1/me/feed?fields=link,message,place,story,created_time,description&limit=1000&access_token=$access_token" > json.data
 
 #jq -r ".data[]" json.data
 
@@ -50,6 +50,7 @@ echo -n "Created time : "
 jq -r ".data[$i].created_time" json.data
 echo ""
 echo ""
+
 done
 
 #rm json.data
