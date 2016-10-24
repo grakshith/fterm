@@ -1,7 +1,7 @@
 #!/bin/bash
 source config.cfg
 
-echo -e "Your Photos"
+echo "Your Photos"
 
 curl -s -X GET \
  "https://graph.facebook.com/v2.2/me/photos?fields=link%2Cname%2Calbum%2Csource%2Clikes&limit=1000&access_token=$access_token" >djson.data
