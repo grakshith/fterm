@@ -31,7 +31,6 @@ fi
 if [ "$album" != "null" ]
 then
   echo "Album Name : " $(jq -r ".data[$i].album.name" djson.data)
-  jq -r ".data[$i].album" djson.data
 fi
 
 if [ "$(jq -r ".data[$i].likes" djson.data)" != "null" ]
@@ -56,4 +55,6 @@ fi
 #clear
 printf "\n\n"
 done
+
+rm -r -f wget*
 #rm djson.data
