@@ -17,6 +17,7 @@ story="$(jq -r ".home.data[$i].story" json.data)"
 link="$(jq -r ".home.data[$i].link" json.data)"
 places="$(jq -r ".home.data[$i].place" json.data)"
 description="$(jq -r ".home.data[$i].description" json.data)"
+id="$(jq -r ".home.data[$i].id" json.data)"
 if [ "$message" != "null" ]
 then
 echo -n "Message : "
@@ -62,7 +63,17 @@ curl -s -X POST \
  -d "access_token=$access_token" \
  "https://graph.facebook.com/v2.1/$id/likes" | jq -r ".success"
  echo ""
+fi
 
+if [ "$input" = "comment" ]
+	then
+	read comment
+	curl -s -X POST \
+ -d "access_token=$access_token&message=$comment" \
+ "https://graph.facebook.com/v2.1/$id/comments" | jq -r ".id"
+ echo "Successfully posted comment"
+ echo ""
+fi
 
 done
 
