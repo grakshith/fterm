@@ -4,4 +4,6 @@ config.cfg
 comments.data
 json.data
 djson.data
+vjson.data
 fbimages
+fbvideos

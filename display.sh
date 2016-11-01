@@ -1,10 +1,11 @@
 #!/bin/bash
 source config.cfg
 
-echo "Your Photos"
+figlet -f script "Your Photos"
 
 curl -s -X GET \
  "https://graph.facebook.com/v2.2/me/photos?fields=link%2Cname%2Calbum%2Csource%2Clikes&limit=1000&access_token=$access_token" >djson.data
+
 length=$(jq -r ".data | length" djson.data)
 
 #jq -r ".data[]" djson.data
@@ -31,7 +32,6 @@ fi
 if [ "$album" != "null" ]
 then
   echo "Album Name : " $(jq -r ".data[$i].album.name" djson.data)
-  jq -r ".data[$i].album" djson.data
 fi
 
 if [ "$(jq -r ".data[$i].likes" djson.data)" != "null" ]
@@ -45,12 +45,10 @@ then
   done
 fi
 
-#TODO-1)work needed on automatic display of images
 if [ "$link" != "null" ]
 then
   wget -q -O fbimages/"$i.jpg" "$(jq -r ".data[$i].source" djson.data)"
-  sudo fbi fbimages/"$i.jpg"
-  #use`sudo xdg-open fbimages/"$i.jpg"` on virtual consoles
+  sudo timeout "$delay_time"s xdg-open fbimages/"$i.jpg" #$delay_time input from config.cfg
 fi
 
 #clear
