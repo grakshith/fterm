@@ -17,9 +17,11 @@ then
      -F "url=$image_location" \
      -F "caption=$caption"
       "https://graph.facebook.com/me/photos"
-fi
 else
   curl -F "access_token=$access_token" \
      -F "source=@$image_location" \
      -F "caption=$caption"
       "https://graph.facebook.com/me/photos"
+fi
+
+      
