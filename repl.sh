@@ -46,7 +46,12 @@ do
 	if [ "$input" == "timeline" ]; then
 		./home.sh
 	fi
-
+	if [ "$input" == "photos" ]; then
+		./display.sh
+	fi
+	if [ "$input" == "videos" ]; then
+		./vplay.sh
+	fi
 	if [ "$input" == "help" ]; then
 		usage
 	fi

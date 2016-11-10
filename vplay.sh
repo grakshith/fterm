@@ -4,9 +4,19 @@ source config.cfg
 figlet -f script "Your Videos"
 
 curl -s -X GET \
- "https://graph.facebook.com/v2.8/me/videos/uploaded/?fields=source%2Clength%2Ctitle%2Ccreated_time%2Cpermalink_url&access_token=$access_token">vjson.data
+ "https://graph.facebook.com/v2.2/me/videos/uploaded/?fields=source,length,title,created_time,permalink_url&access_token=$access_token">vjson.data
 
 length=$(jq -r ".data | length" vjson.data)
+
+if [ $length -eq 0 ]; then
+	echo "Sorry no videos to display!"
+	exit 0
+fi
+if [ -d "fbvideos"]; then
+  .
+else
+  mkdir fbvideos
+fi
 
 for((i=0;i<$length;i++))
 do
@@ -38,7 +48,7 @@ fi
 if [ "$source" != "null" ]
 then
   wget -q -O fbvideos/"$i.mp4" "$(jq -r ".data[$i].source" vjson.data)"
-  sudo timeout $(echo "$vlength+$delay_time"|bc)s xdg-open fbvideos/"$i.mp4" #$delay_time input from config.cfg
+  timeout $(echo "$vlength+$delay_time"|bc)s xdg-open fbvideos/"$i.mp4" #$delay_time input from config.cfg
 fi
 
 #clear

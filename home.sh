@@ -5,16 +5,38 @@ source config.cfg
 echo "Your feed"
 
 curl -s -X GET \
- "https://graph.facebook.com/v2.1/me/feed?fields=link,message,place,story,source,created_time,description&limit=1000&access_token=$access_token" > json.data &
+ "https://graph.facebook.com/v2.2/me/feed?fields=link,message,place,picture,story,source,created_time,description&limit=1000&access_token=$access_token" > json.data &
 
 pid=$!
 
 ./wait.sh $pid
 unset pid
 
+usage() {
+  cat<<EOF
+List of commands available
+  show thumbnail	Display the thumbnail present in the post
+  show video 		Display the Video in this post
+  like      		Like the current photo
+  comment   		Comment on this photo
+  previous  		Go to the previous photo
+  
+  Navigation:
+  back      To go back to the previous level
+  exit      Quit the application
+
+EOF
+}
+
+
 #jq -r ".data[]" json.data
 
 length=$(jq -r ".data | length" json.data)
+if [ -d "fbthumbs" ]; then
+  echo
+else
+  mkdir fbthumbs
+fi
 
 for((i=0;i<$length;i++))
 do
@@ -25,8 +47,10 @@ message="$(jq -r ".data[$i].message" json.data)"
 story="$(jq -r ".data[$i].story" json.data)"
 souce="$(jq -r ".data[$i].source" json.data)"
 link="$(jq -r ".data[$i].link" json.data)"
+picture="$(jq -r ".data[$i].picture" json.data)"
 places="$(jq -r ".data[$i].place" json.data)"
 description="$(jq -r ".data[$i].description" json.data)"
+tim=$("jq -r ".data[$i].created_time" json.data)"
 if [ "$from" != "null" ]; then
 	echo "From : $from"
 fi
@@ -60,17 +84,31 @@ if [ "$souce" != "null" ];
 	then
 	echo "Video from this post available"
 fi
-echo -n "Created time : "
-jq -r ".data[$i].created_time" json.data
-echo ""
+if [ "$picture" != "null" ];
+	then
+	echo "This post contains a thumbnail"
+fi
+if [ "$tim"!="null" ]; then
+	echo -n "Created time : "
+	jq -r ".data[$i].created_time" json.data
+	echo ""
+fi
 echo -n "facebook/timeline $ "
 
 read input
+if [ "$input" = "previous" ]; then
+  i=$((i-2))
+  echo ""
+  continue
+fi
+if [ "$input" = "back" ]; then
+	exit
+fi
 if [ "$input" = "like" ]
 then
 curl -s -X POST \
  -d "access_token=$access_token" \
- "https://graph.facebook.com/v2.1/$id/likes" | jq -r ".success" &
+ "https://graph.facebook.com/v2.2/$id/likes" | jq -r ".success" &
 pid=$!
 
 ./wait.sh $pid
@@ -78,9 +116,12 @@ unset pid
  echo ""
 
 fi
-if [ "$input" = "show video" ];
-	then
+if [ "$input" = "show video" ]; then
 		vlc $souce
+fi
+if [ "$input" = "show thumbnail" ]; then
+	wget -q -O fbthumbs/"$i.png" "$(jq -r ".data[$i].picture" json.data)"
+	xdg-open fbthumbs/"$i.png"
 fi
 
 if [ "$input" = "comment" ]
@@ -88,7 +129,7 @@ if [ "$input" = "comment" ]
 	read comment
 	curl -s -X POST \
  -d "access_token=$access_token&message=$comment" \
- "https://graph.facebook.com/v2.1/$id/comments" | jq -r ".id"
+ "https://graph.facebook.com/v2.2/$id/comments" | jq -r ".id"
 pid=$!
 
 ./wait.sh $pid
@@ -119,7 +160,12 @@ done
 echo "End of comments for this post"
 echo ""
 fi
-
+if [ "$input" = "help" ]; then
+  i=$((i-1))
+  usage
+  read ip
+  continue
+fi
 
 
 done
