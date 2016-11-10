@@ -14,13 +14,13 @@ unset pid
 usage() {
   cat<<EOF
 List of commands available
-  view      Display the photo 
+  view      Display the photo
   like      Like the current photo
   comment   Comment on this photo
   previous  Go to the previous photo
   back      Go back to the shell
   notifications Display the notifications
-  
+
   Navigation:
   back      To go back to the previous level
   exit      Quit the application

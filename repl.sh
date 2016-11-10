@@ -12,13 +12,13 @@ unset pid
 usage() {
 	cat<<EOF
 List of commands available
-	home			Display the user's home feed 
+	home			Display the user's home feed
 	timeline		Display the user's timeline feeds
 	photos			Display the user's photos
 	videos			Display the user's videos
 	inbox			Display the user's inbox
-	notifications	Display the notifications
-	
+	notifications	        Display the notifications
+
 	Navigation:
 	back 			To go back to the previous level
 	exit			Quit the application
