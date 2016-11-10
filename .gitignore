@@ -1,9 +1,6 @@
 *~
-init.data
 config.cfg
-comments.data
-json.data
-djson.data
-vjson.data
+*.data
 fbimages
 fbvideos
+fbthumbs
