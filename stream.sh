@@ -2,8 +2,9 @@
 
 source config.cfg
 
-echo "Home"
+figlet -f script "Home"
 echo "Fetching your content"
+
 curl -s -X GET \
  "https://graph.facebook.com/v2.1/me?fields=home&access_token=$access_token" > json.data &
 
@@ -21,7 +22,7 @@ List of commands available
   like      		Like the current photo
   comment   		Comment on this photo
   previous  		Go to the previous photo
-  
+
   Navigation:
   back      To go back to the previous level
   exit      Quit the application
@@ -141,7 +142,7 @@ if [ "$input" = "show comments" ]
 	then
 	curl -s -X GET \
  "https://graph.facebook.com/v2.2/$id/comments?limit=10&access_token=$access_token" > comments.data &
- 
+
  pid=$!
 
  ./wait.sh $pid

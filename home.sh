@@ -2,7 +2,7 @@
 
 source config.cfg
 
-echo "Your feed"
+figlet -f script "Your Feed"
 
 curl -s -X GET \
  "https://graph.facebook.com/v2.2/me/feed?fields=link,message,place,picture,story,source,created_time,description&limit=1000&access_token=$access_token" > json.data &
@@ -20,7 +20,7 @@ List of commands available
   like      		Like the current photo
   comment   		Comment on this photo
   previous  		Go to the previous photo
-  
+
   Navigation:
   back      To go back to the previous level
   exit      Quit the application
@@ -50,7 +50,7 @@ link="$(jq -r ".data[$i].link" json.data)"
 picture="$(jq -r ".data[$i].picture" json.data)"
 places="$(jq -r ".data[$i].place" json.data)"
 description="$(jq -r ".data[$i].description" json.data)"
-tim=$("jq -r ".data[$i].created_time" json.data)"
+tim="$("jq -r ".data[$i].created_time" json.data)"
 if [ "$from" != "null" ]; then
 	echo "From : $from"
 fi
@@ -142,7 +142,7 @@ if [ "$input" = "show comments" ]
 	then
 	curl -s -X GET \
  "https://graph.facebook.com/v2.2/$id/comments?limit=10&access_token=$access_token" > comments.data &
- 
+
  pid=$!
 
  ./wait.sh $pid
