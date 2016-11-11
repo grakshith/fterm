@@ -2,8 +2,9 @@
 
 source config.cfg
 
-echo "Home"
+figlet -f script "Home"
 echo "Fetching your content"
+
 curl -s -X GET \
  "https://graph.facebook.com/v2.1/me?fields=home&access_token=$access_token" > json.data &
 
@@ -13,16 +14,35 @@ curl -s -X GET \
 unset pid
  length=$(jq -r ".home.data | length" json.data)
 
+ usage() {
+  cat<<EOF
+List of commands available
+  show thumbnail	Display the thumbnail present in the post
+  show video 		Display the Video in this post
+  like      		Like the current photo
+  comment   		Comment on this photo
+  previous  		Go to the previous photo
+
+  Navigation:
+  back      To go back to the previous level
+  exit      Quit the application
+
+EOF
+}
+
 for((i=0;i<$length;i++))
 do
 #jq -r ".data[$i]" json.data
 message="$(jq -r ".home.data[$i].message" json.data)"
 from="$(jq -r ".home.data[$i].from.name" json.data)"
 story="$(jq -r ".home.data[$i].story" json.data)"
+souce="$(jq -r ".home.data[$i].source" json.data)"
+picture="$(jq -r ".home.data[$i].picture" json.data)"
 link="$(jq -r ".home.data[$i].link" json.data)"
 places="$(jq -r ".home.data[$i].place" json.data)"
 description="$(jq -r ".home.data[$i].description" json.data)"
 id="$(jq -r ".home.data[$i].id" json.data)"
+tim=$("jq -r ".data[$i].created_time" json.data)"
 
 if [ "$from" != "null" ]; then
 	echo "From : $from"
@@ -60,13 +80,28 @@ do
 done
 #jq -r ".home.data[$i].place[]" json.data
 fi
-
-echo -n "Created time : "
-jq -r ".home.data[$i].created_time" json.data
-echo ""
+if [ "$souce" != "null" ];
+	then
+	echo "Video from this post available"
+fi
+if [ "$picture" != "null" ];
+	then
+	echo "This post contains a thumbnail"
+fi
+if [ "$tim"!="null" ]; then
+	echo -n "Created time : "
+	jq -r ".data[$i].created_time" json.data
+	echo ""
+fi
 echo -n "facebook/home $ "
 
 read input
+if [ "$input" = "previous" ]; then
+  i=$((i-2))
+  echo ""
+  continue
+fi
+
 if [ "$input" = "back" ]; then
 	exit
 fi
@@ -80,6 +115,13 @@ pid=$!
 ./wait.sh $pid
 unset pid
  echo ""
+fi
+if [ "$input" = "show video" ]; then
+		vlc $souce
+fi
+if [ "$input" = "show thumbnail" ]; then
+	xdg-open "$picture"
+	xdg-open fbthumbs/"home-$i.png"
 fi
 
 if [ "$input" = "comment" ]
@@ -100,7 +142,7 @@ if [ "$input" = "show comments" ]
 	then
 	curl -s -X GET \
  "https://graph.facebook.com/v2.2/$id/comments?limit=10&access_token=$access_token" > comments.data &
- 
+
  pid=$!
 
  ./wait.sh $pid
@@ -118,6 +160,12 @@ if [ "$input" = "show comments" ]
 done
 echo "End of comments for this post"
 echo ""
+fi
+if [ "$input" = "help" ]; then
+  i=$((i-1))
+  usage
+  read ip
+  continue
 fi
 
 

@@ -12,13 +12,13 @@ unset pid
 usage() {
 	cat<<EOF
 List of commands available
-	home			Display the user's home feed 
+	home			Display the user's home feed
 	timeline		Display the user's timeline feeds
 	photos			Display the user's photos
 	videos			Display the user's videos
 	inbox			Display the user's inbox
-	notifications	Display the notifications
-	
+	notifications	        Display the notifications
+
 	Navigation:
 	back 			To go back to the previous level
 	exit			Quit the application
@@ -46,7 +46,12 @@ do
 	if [ "$input" == "timeline" ]; then
 		./home.sh
 	fi
-
+	if [ "$input" == "photos" ]; then
+		./display.sh
+	fi
+	if [ "$input" == "videos" ]; then
+		./vplay.sh
+	fi
 	if [ "$input" == "help" ]; then
 		usage
 	fi
