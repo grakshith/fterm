@@ -1,5 +1,8 @@
 #!/bin/bash
 
+source config.cfg
+
+figlet -f script "Your Profile"
 curl -sX GET "https://graph.facebook.com/v2.3/me?fields=name%2Cpicture%2Cbirthday%2Cemail%2Chometown%2Cgender%2Ceducation%2Cwork%2Cgames%2Cbooks%2Cmusic%2Cmovies%2Cfavorite_athletes%2Cfavorite_teams&access_token=$access_token" > about.txt
 
 
@@ -24,7 +27,7 @@ echo -e "Birthday: $birthday\n\n"
 
 echo -e "Email: $email\n\n"
 
-echo -e "Hometown: hometown\n\n"
+echo -e "Hometown: $hometown\n\n"
 
 echo -e "Gender: $gender\n\n"
 
@@ -37,12 +40,12 @@ do
 	echo -e $(jq -r ".education[$i].school.name" about.txt)
 done
 
-echo 
+echo
 
 count=$(jq -r '.work | length' about.txt)
 i=0
 if [ $count -ge 1 ]
-then 
+then
 	echo -e "Work:"
 	for((i=0;i<count;i++))
 	do
