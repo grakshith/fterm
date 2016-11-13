@@ -50,7 +50,7 @@ link="$(jq -r ".data[$i].link" json.data)"
 picture="$(jq -r ".data[$i].picture" json.data)"
 places="$(jq -r ".data[$i].place" json.data)"
 description="$(jq -r ".data[$i].description" json.data)"
-tim="$("jq -r ".data[$i].created_time" json.data)"
+tim="$(jq -r ".data[$i].created_time" json.data)"
 if [ "$from" != "null" ]; then
 	echo "From : $from"
 fi

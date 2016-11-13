@@ -1,6 +1,10 @@
 #! /bin/bash
+source config.cfg
+
+figlet -f script "Your Inbox"
+
 curl -s -X GET \
- "https://graph.facebook.com/v2.3/me?fields=inbox%7Bcomments%2Cfrom%2Csubject%2Cto%7D&access_token=EAACEdEose0cBAJLACncC7WJgvG99ijpelO9pZCAZBZBAvsMjUxSK8WQIoJmDBg561sRRywyNfcM9GTwQZBwcxZChvrQe6OFsx7SPrgVDFd9lcLa60lVwDQP4aZBBmkD5trA7HQYTfltvlwvQp9zAWRr10ouWEDlxtVw2mxUJThNQZDZD" > inbox.txt
+ "https://graph.facebook.com/v2.3/me?fields=inbox%7Bcomments%2Cfrom%2Csubject%2Cto%7D&access_token=$access_token" > inbox.txt
 clear
 countgroups=$(jq -r ".inbox.data | length" inbox.txt)
 status=""
@@ -24,7 +28,7 @@ do
     #list contains the list of names
     list=$(jq -r ".inbox.data[$i].to.data[0].name" inbox.txt)
     #checks whether the name exists in the list and displays that persons conversation
-    #with you 
+    #with you
     if [ "$name" == "$list" ]
     then
       countcomments=$(jq -r ".inbox.data[$i].comments.data | length" inbox.txt)

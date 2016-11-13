@@ -18,7 +18,8 @@ List of commands available
 	videos			Display the user's videos
 	inbox			Display the user's inbox
 	notifications	        Display the notifications
-
+        post message            Post a message on your wall
+        post photo              Post a photo on your wall
 	Navigation:
 	back 			To go back to the previous level
 	exit			Quit the application
@@ -54,5 +55,14 @@ do
 	fi
 	if [ "$input" == "help" ]; then
 		usage
+	fi
+  if [ "$input" == "inbox" ]; then
+		./inbox.sh
+	fi
+  if [ "$(echo $input | cut -d " " -f3)" == "post message" ]; then
+		./postMessage.sh
+	fi
+  if [ "$input" == "post photo" ]; then
+		./postPhoto.sh
 	fi
 done
