@@ -59,6 +59,9 @@ do
   if [ "$input" == "inbox" ]; then
 		./inbox.sh
 	fi
+  if [ "$input" == "notifications" ]; then
+		./notify.sh
+	fi
   if [ "$(echo $input | cut -d " " -f3)" == "post message" ]; then
 		./postMessage.sh
 	fi
