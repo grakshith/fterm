@@ -122,4 +122,6 @@ read ip
 #clear
 
 done
+
+rm -r -f wget*
 #rm djson.data
