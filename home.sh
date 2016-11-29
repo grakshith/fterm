@@ -37,7 +37,7 @@ else
   mkdir fbthumbs
 fi
 
-for((i=0;i<$length;i++))
+for((i=0;i<=$length;i++))
 do
 #jq -r ".data[$i]" json.data
 id="$(jq -r ".data[$i].id" json.data)"
