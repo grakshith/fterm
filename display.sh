@@ -18,9 +18,7 @@ List of commands available
   like      Like the current photo
   comment   Comment on this photo
   previous  Go to the previous photo
-  back      Go back to the shell
-  notifications Display the notifications
-
+  
   Navigation:
   back      To go back to the previous level
   exit      Quit the application
@@ -33,7 +31,7 @@ length=$(jq -r ".data | length" djson.data)
 #jq -r ".data[]" djson.data
 
 length=$(jq -r ".data | length" djson.data)
-if [ -d "fbimages"]; then
+if [ -d "fbimages" ]; then
   echo
 else
   mkdir fbimages

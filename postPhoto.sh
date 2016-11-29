@@ -7,21 +7,21 @@ then
 else
   echo "Enter the location of the file"
 fi
-read $image_location
+read image_location
 echo "Enter caption"
-read $caption
-echo "Your image has been posted successfully..."
+read caption
 if [ $choice -eq 1 ]
 then
-  curl -F "access_token=$access_token" \
+  curl -sX POST \
+  	 -F "access_token=$access_token" \
      -F "url=$image_location" \
-     -F "caption=$caption"
-      "https://graph.facebook.com/me/photos"
+     -F "caption=$caption" \
+      "https://graph.facebook.com/me/photos" >/dev/null
 else
-  curl -F "access_token=$access_token" \
+  curl -sX POST \
+     -F "access_token=$access_token" \
      -F "source=@$image_location" \
-     -F "caption=$caption"
-      "https://graph.facebook.com/me/photos"
+     -F "caption=$caption" \
+      "https://graph.facebook.com/me/photos" >/dev/null
 fi
-
-      
+echo "Your image has been posted successfully..."

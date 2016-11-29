@@ -4,11 +4,27 @@ source config.cfg
 figlet -f script "Your Inbox"
 
 curl -s -X GET \
- "https://graph.facebook.com/v2.3/me?fields=inbox%7Bcomments%2Cfrom%2Csubject%2Cto%7D&access_token=$access_token" > inbox.txt
-clear
+ "https://graph.facebook.com/v2.3/me?fields=inbox%7Bcomments%2Cfrom%2Csubject%2Cto%7D&access_token=$access_token" > inbox.txt &
+
+pid=$!
+
+ ./wait.sh $pid
+unset pid
+
+usage() {
+  cat<<EOF
+List of commands available
+  No specific commands to display
+  
+  Navigation:
+  back      To go back to the previous level
+
+EOF
+}
+
 countgroups=$(jq -r ".inbox.data | length" inbox.txt)
 status=""
-while [ "$status" != "e" ]
+while(true)
 do
   #displays the names of all your friends
   for((i=0;i<countgroups;i++))
@@ -19,10 +35,16 @@ do
       jq -r ".inbox.data[$i].to.data[0].name" inbox.txt
   fi
   done
-  echo
+  echo "Enter the name of the person whose conversation you want to read or back to return to the previous menu"
+    echo -n "facebook/inbox $ "
   #enter the name of any person in the list
-  read $name
-  clear
+  read name
+  if [ "$name" = "back" ]; then
+    exit 0
+  fi
+  if [ "$name" = "help" ]; then
+    usage
+  fi
   for((i=0;i<countgroups;i++))
   do
     #list contains the list of names
@@ -41,11 +63,11 @@ do
       echo "$user: $comment"
       fi
       done
-      read prompt
-      break
+      
+      echo ""
+      echo ""
     fi
   done
   #press e to exit and any other key to continue
-  read -n1 status
+  read prompt
 done
-#when e is presse, go here

@@ -7,7 +7,7 @@ curl -s -X GET \
  "https://graph.facebook.com/v2.2/me/notifications?fields=created_time%2Ctitle%2Clink%2Capplication&limit=10&access_token=$access_token">njson.data
 
 length=$(jq -r ".data | length" njson.data)
-
+echo $length
 if [ $length -eq 0 ]; then
 	echo "Sorry no notifications to display!"
 	exit 0

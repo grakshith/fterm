@@ -25,7 +25,6 @@ List of commands available
 
   Navigation:
   back      To go back to the previous level
-  exit      Quit the application
 
 EOF
 }
@@ -42,7 +41,7 @@ link="$(jq -r ".home.data[$i].link" json.data)"
 places="$(jq -r ".home.data[$i].place" json.data)"
 description="$(jq -r ".home.data[$i].description" json.data)"
 id="$(jq -r ".home.data[$i].id" json.data)"
-tim=$("jq -r ".data[$i].created_time" json.data)"
+tim="$(jq -r ".home.data[$i].created_time" json.data)"
 
 if [ "$from" != "null" ]; then
 	echo "From : $from"
@@ -88,9 +87,8 @@ if [ "$picture" != "null" ];
 	then
 	echo "This post contains a thumbnail"
 fi
-if [ "$tim"!="null" ]; then
-	echo -n "Created time : "
-	jq -r ".data[$i].created_time" json.data
+if [ "$tim" != "null" ]; then
+	echo -n "Created time : $tim"
 	echo ""
 fi
 echo -n "facebook/home $ "
@@ -117,11 +115,10 @@ unset pid
  echo ""
 fi
 if [ "$input" = "show video" ]; then
-		vlc $souce
+		vlc $souce > /dev/null 2>&1
 fi
 if [ "$input" = "show thumbnail" ]; then
 	xdg-open "$picture"
-	xdg-open fbthumbs/"home-$i.png"
 fi
 
 if [ "$input" = "comment" ]
@@ -162,7 +159,7 @@ echo "End of comments for this post"
 echo ""
 fi
 if [ "$input" = "help" ]; then
-  i=$((i-1))
+  i=$((i-2))
   usage
   read ip
   continue

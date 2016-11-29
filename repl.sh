@@ -12,6 +12,7 @@ unset pid
 usage() {
 	cat<<EOF
 List of commands available
+	about			Display the user's profile
 	home			Display the user's home feed
 	timeline		Display the user's timeline feeds
 	photos			Display the user's photos
@@ -56,11 +57,17 @@ do
 	if [ "$input" == "help" ]; then
 		usage
 	fi
+	if [ "$input" == "notifications" ]; then
+		./notify.sh
+	fi
+	if [ "$input" == "about" ]; then
+		./about.sh
+	fi
   if [ "$input" == "inbox" ]; then
 		./inbox.sh
 	fi
-  if [ "$(echo $input | cut -d " " -f3)" == "post message" ]; then
-		./postMessage.sh
+  if [ "$input" == "post message" ]; then
+		./postMessage.sh 
 	fi
   if [ "$input" == "post photo" ]; then
 		./postPhoto.sh

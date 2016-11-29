@@ -23,7 +23,6 @@ List of commands available
 
   Navigation:
   back      To go back to the previous level
-  exit      Quit the application
 
 EOF
 }
@@ -117,11 +116,12 @@ unset pid
 
 fi
 if [ "$input" = "show video" ]; then
-		vlc $souce
+		vlc $souce > /dev/null 2>&1
 fi
 if [ "$input" = "show thumbnail" ]; then
 	wget -q -O fbthumbs/"$i.png" "$(jq -r ".data[$i].picture" json.data)"
-	xdg-open fbthumbs/"$i.png"
+	echo "$(jq -r ".data[$i].picture" json.data)" >> fbthumbs/log
+	xdg-open "$(jq -r ".data[$i].picture" json.data)"
 fi
 
 if [ "$input" = "comment" ]
